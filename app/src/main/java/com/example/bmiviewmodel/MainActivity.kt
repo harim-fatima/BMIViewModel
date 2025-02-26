@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import com.example.bmiviewmodel.ui.theme.BMIViewModelTheme
 import java.text.DecimalFormat
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,10 +44,10 @@ class MainActivity : ComponentActivity() {
 fun Bmi(modifier: Modifier = Modifier) {
     var heightInput by remember { mutableStateOf("") }
     var weightInput by remember { mutableStateOf("") }
-    val height = heightInput.toFloatOrNull() ?: 0.0f
+    val height = heightInput.toIntOrNull() ?: 0
     val weight = weightInput.toIntOrNull() ?: 0
     val formatter = DecimalFormat("0.00")
-    val bmi = if (weight > 0 && height > 0) formatter.format(weight / (height * height)) else 0.0f
+    val bmi = if (weight > 0 && height > 0) formatter.format(MyViewModel().calculateBMI(weight =weight, height = height)) else 0.0f
 
     Column {
         Text (
