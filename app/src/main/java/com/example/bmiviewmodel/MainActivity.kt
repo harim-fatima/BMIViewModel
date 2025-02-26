@@ -23,6 +23,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bmiviewmodel.ui.theme.BMIViewModelTheme
 import java.text.DecimalFormat
 
@@ -41,13 +42,13 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Bmi(modifier: Modifier = Modifier) {
+fun Bmi(modifier: Modifier = Modifier, myViewModel: MyViewModel = viewModel()) {
     var heightInput by remember { mutableStateOf("") }
     var weightInput by remember { mutableStateOf("") }
     val height = heightInput.toIntOrNull() ?: 0
     val weight = weightInput.toIntOrNull() ?: 0
     val formatter = DecimalFormat("0.00")
-    val bmi = if (weight > 0 && height > 0) formatter.format(MyViewModel().calculateBMI(weight =weight, height = height)) else 0.0f
+    val bmi = if (weight > 0 && height > 0) formatter.format(myViewModel.calculateBMI(weight =weight, height = height)) else 0.0f
 
     Column {
         Text (
