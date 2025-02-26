@@ -45,13 +45,22 @@ class MainActivity : ComponentActivity() {
 fun Bmi(modifier: Modifier = Modifier, myViewModel: MyViewModel = viewModel()) {
     var heightInput by remember { mutableStateOf("") }
     var weightInput by remember { mutableStateOf("") }
-    val height = heightInput.toIntOrNull() ?: 0
-    val weight = weightInput.toIntOrNull() ?: 0
     val formatter = DecimalFormat("0.00")
-    val bmi = if (weight > 0 && height > 0) formatter.format(myViewModel.calculateBMI(weight =weight, height = height)) else 0.0f
+
+    val bmi = myViewModel.bmi
+
+    val height = heightInput.toFloatOrNull() ?: 0.0f
+    val weight = weightInput.toFloatOrNull() ?: 0.0f
+
+    myViewModel.weight = weight
+    myViewModel.height = height
+
+    myViewModel.calculateBMI()
+
+    val formattedBmi = if (bmi != 0.0f) formatter.format(bmi) else "0.00"
 
     Column {
-        Text (
+        Text(
             text = "Body mass index",
             fontSize = 24.sp,
             color = MaterialTheme.colorScheme.primary,
@@ -62,19 +71,18 @@ fun Bmi(modifier: Modifier = Modifier, myViewModel: MyViewModel = viewModel()) {
         )
         OutlinedTextField(
             value = heightInput,
-            onValueChange = {heightInput = it.replace(',','.')},
-            label = {Text("Height")},
+            onValueChange = { heightInput = it.replace(',', '.') },
+            label = { Text("Height (m)") },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 8.dp, end = 8.dp)
         )
         OutlinedTextField(
             value = weightInput,
-            onValueChange = {weightInput = it.replace(',','.')},
-            label = {Text("Weight")},
+            onValueChange = { weightInput = it.replace(',', '.') },
+            label = { Text("Weight (kg)") },
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
@@ -82,7 +90,7 @@ fun Bmi(modifier: Modifier = Modifier, myViewModel: MyViewModel = viewModel()) {
                 .padding(start = 8.dp, end = 8.dp)
         )
         Text(
-            text = "Body mass index is " + bmi,
+            text = "Body mass index is $formattedBmi",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, top = 16.dp)
