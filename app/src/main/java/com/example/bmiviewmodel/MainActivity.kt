@@ -47,8 +47,6 @@ fun Bmi(modifier: Modifier = Modifier, myViewModel: MyViewModel = viewModel()) {
     var weightInput by remember { mutableStateOf("") }
     val formatter = DecimalFormat("0.00")
 
-    val bmi = myViewModel.bmi
-
     val height = heightInput.toFloatOrNull() ?: 0.0f
     val weight = weightInput.toFloatOrNull() ?: 0.0f
 
@@ -56,8 +54,8 @@ fun Bmi(modifier: Modifier = Modifier, myViewModel: MyViewModel = viewModel()) {
     myViewModel.height = height
 
     myViewModel.calculateBMI()
-
-    val formattedBmi = if (bmi != 0.0f) formatter.format(bmi) else "0.00"
+    val bmi = myViewModel.bmi
+    val formattedBmi = if (bmi != 0f) formatter.format(bmi) else "0.00"
 
     Column {
         Text(
